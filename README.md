@@ -8,17 +8,17 @@ The UI follows the interaction patterns familiar from mainstream AI chat clients
 
 ## Features
 
-- **Fully on-device inference** — chat runs through AICore on the phone. The only optional network access is the `web_fetch` tool, which is explicitly triggered and only fetches user-approved public HTTPS pages.
-- **Markdown rendering** — assistant answers, user prompts, and thought transcripts are rendered with Markwon: tables, checklists, strikethrough, code blocks, live during streaming.
-- **LaTeX math** — `$...$` and `$$...$$` formulas are parsed by a C++ based engine (RaTeX) and rendered synchronously, including mid-stream.
-- **Thinking mode** — optional thought stream shown in a live preview panel with a full-transcript reader, kept out of the model transcript and the TTS queue.
-- **Voice chat** — two-way conversation using the platform `SpeechRecognizer` for input and a sentence-streamed TTS queue for output, with a full-screen voice overlay (captions, live meters, haptic-only feedback while speaking).
-- **Semantic photo search** — the device photo library is indexed into 768-dim cross-modal vectors with EmbeddingGemma 2 (stored locally in an append-only journal) so the model can search your photos by meaning and describe them.
-- **Function calling tools** — `get_datetime`, `search_conversation_history`, `search_images`, and `web_fetch`; tool output is size-capped and xml-wrapped to resist injection.
-- **Multimodal input** — attach images from the camera or the photo picker; attachments are downsampled before being sent to the model.
-- **Conversation management** — multiple sessions with rename/delete and full-text search, always stored locally with atomic writes (`allowBackup=false`).
-- **Generation settings** — temperature, Top-K, max output tokens, and a plain system instruction, with a model warm-up toggle for faster first responses.
-- **Bilingual** — every user-facing string ships inline as Korean/English pair, following the system language.
+- Fully on-device inference (chat runs through AICore; the only optional network access is the explicitly triggered `web_fetch` tool)
+- Markdown rendering for answers, prompts, and thought transcripts (live during streaming)
+- LaTeX math (inline `$...$` and display `$$...$$`) rendered synchronously, including mid-stream
+- Thinking mode with a live thought preview and full-transcript reader
+- Two-way voice chat with a full-screen voice overlay
+- Semantic photo search over the device photo library
+- Function calling tools (`get_datetime`, `search_conversation_history`, `search_images`, `web_fetch`)
+- Multimodal input (camera and photo picker attachments)
+- Multiple sessions with rename/delete and full-text session search
+- Generation settings (temperature, Top-K, max output tokens, system instruction, model warm-up toggle)
+- Bilingual strings (Korean/English inline, following the system language)
 
 ## Requirements
 
