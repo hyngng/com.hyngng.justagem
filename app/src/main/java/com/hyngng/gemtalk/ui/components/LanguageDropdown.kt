@@ -47,6 +47,7 @@ import androidx.compose.ui.hapticfeedback.HapticFeedbackType
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -118,6 +119,7 @@ internal fun LanguageDropdownRow(
         Row(
             modifier = Modifier
                 .fillMaxWidth()
+                .heightIn(min = 68.dp)
                 .clip(RoundedCornerShape(16.dp))
                 .clickable(
                     interactionSource = interactionSource,
@@ -130,7 +132,7 @@ internal fun LanguageDropdownRow(
                 .padding(horizontal = 14.dp, vertical = 10.dp),
             verticalAlignment = Alignment.CenterVertically,
         ) {
-            Column(Modifier.weight(1f)) {
+            Column(Modifier.weight(1f).padding(end = 12.dp)) {
                 Text(
                     text = s.t("언어", "Language"),
                     style = MaterialTheme.typography.bodyMedium,
@@ -158,7 +160,9 @@ internal fun LanguageDropdownRow(
         }
         if (menuPresent) {
             androidx.compose.ui.window.Popup(
-                alignment = Alignment.TopStart,
+                // Anchored to the trailing (right) edge of the row so the
+                // narrow menu grows leftward from the control that opened it.
+                alignment = Alignment.TopEnd,
                 offset = IntOffset(0, with(density) { anchorHeight.roundToPx() + 6.dp.roundToPx() }),
                 onDismissRequest = { expanded = false },
                 properties = androidx.compose.ui.window.PopupProperties(focusable = true),
@@ -168,7 +172,7 @@ internal fun LanguageDropdownRow(
                     enter = fadeIn(tween(150)) +
                         scaleIn(
                             initialScale = 0.94f,
-                            transformOrigin = TransformOrigin(0.5f, 0f),
+                            transformOrigin = TransformOrigin(1f, 0f),
                             animationSpec = tween(
                                 durationMillis = GemTalkDesign.motionStandard,
                                 easing = FastOutSlowInEasing,
@@ -177,12 +181,13 @@ internal fun LanguageDropdownRow(
                     exit = fadeOut(tween(120)) +
                         scaleOut(
                             targetScale = 0.97f,
-                            transformOrigin = TransformOrigin(0.5f, 0f),
+                            transformOrigin = TransformOrigin(1f, 0f),
                             animationSpec = tween(140),
                         ),
                 ) {
                     Surface(
-                        modifier = Modifier.width(280.dp),
+                        // Common compact dropdown width: labels stay one line.
+                        modifier = Modifier.width(112.dp),
                         shape = RoundedCornerShape(18.dp),
                         color = GraphiteRaised,
                         tonalElevation = 10.dp,
@@ -198,7 +203,7 @@ internal fun LanguageDropdownRow(
                             Column(
                                 modifier = Modifier
                                     .fillMaxWidth()
-                                    .padding(horizontal = 14.dp, vertical = 8.dp),
+                                    .padding(horizontal = 12.dp, vertical = 8.dp),
                             ) {
                                 Text(
                                     text = s.t("언어", "Language"),
@@ -207,10 +212,12 @@ internal fun LanguageDropdownRow(
                                 )
                                 Text(
                                     text = currentValue,
-                                    style = MaterialTheme.typography.bodyMedium.copy(
+                                    style = MaterialTheme.typography.bodySmall.copy(
                                         fontWeight = FontWeight.SemiBold,
                                     ),
                                     color = Mist,
+                                    maxLines = 1,
+                                    overflow = TextOverflow.Ellipsis,
                                     modifier = Modifier.padding(top = 1.dp),
                                 )
                             }

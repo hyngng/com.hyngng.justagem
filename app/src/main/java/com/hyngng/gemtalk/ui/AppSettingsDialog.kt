@@ -38,7 +38,9 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.rounded.Info
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.navigationBarsPadding
@@ -162,23 +164,19 @@ fun AppSettingsScreen(
                         horizontal = GemTalkDesign.dialogHorizontalPadding,
                         vertical = GemTalkDesign.sectionSpacing,
                     ),
-                verticalArrangement = Arrangement.spacedBy(0.dp),
+                verticalArrangement = Arrangement.spacedBy(20.dp),
             ) {
-                // Grouped card: each item sits in one rounded panel slightly
-                // brighter than the page background, separated by hairlines.
-                Column(
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .background(GraphiteRaised, RoundedCornerShape(16.dp)),
-                ) {
-                    // Language sits first — a device-wide preference, not a chat-detail toggle.
+                // Language sits first — a device-wide preference, not a chat-detail toggle.
+                SectionHeader(s.t("언어", "Language"))
+                SettingsCard {
                     LanguageDropdownRow(
                         languageTag = languageTag,
                         onLanguageTagChange = onLanguageTagChange,
                     )
+                }
 
-                    HorizontalDivider(color = Hairline.copy(alpha = 0.5f))
-
+                SectionHeader(s.t("피드백", "Feedback"))
+                SettingsCard {
                     DirectSwitchRow(
                         title = s.t("모델 답변 시 햅틱", "Haptics during model responses"),
                         description = s.t(
@@ -200,9 +198,10 @@ fun AppSettingsScreen(
                         checked = soundsEnabled,
                         onCheckedChange = onSoundsChange,
                     )
+                }
 
-                    HorizontalDivider(color = Hairline.copy(alpha = 0.5f))
-
+                SectionHeader(s.t("모델", "Model"))
+                SettingsCard {
                     DirectSwitchRow(
                         title = s.t("모델 미리 예열 (빠른 첫 응답)", "Pre-warm model (faster first reply)"),
                         description = s.t(
@@ -215,15 +214,25 @@ fun AppSettingsScreen(
                 }
 
                 // Discreet on-device privacy statement
-                Spacer(Modifier.height(24.dp))
-                Text(
-                    text = s.t(
-                        "모든 벡터 추출 및 사진 분석은 기기 내부에서만 안전하게 실행되며, 외부 서버로 전송되지 않습니다. 온디바이스 모델에서 가장 매력적인 점이죠.",
-                        "All vector extraction and photo analysis run on this device and are never sent to a server. That’s one of the best things about using an on-device model.",
-                    ),
-                    style = MaterialTheme.typography.labelSmall.copy(fontSize = 11.5.sp),
-                    color = MistFaint,
-                )
+                Row {
+                    Icon(
+                        Icons.Rounded.Info,
+                        contentDescription = null,
+                        tint = MistFaint,
+                        modifier = Modifier
+                            .size(13.dp)
+                            .padding(top = 1.dp),
+                    )
+                    Text(
+                        text = s.t(
+                            "모든 벡터 추출 및 사진 분석은 기기 내부에서만 안전하게 실행되며, 외부 서버로 전송되지 않습니다. 온디바이스 모델에서 가장 매력적인 점이죠.",
+                            "All vector extraction and photo analysis run on this device and are never sent to a server. That’s one of the best things about using an on-device model.",
+                        ),
+                        style = MaterialTheme.typography.labelSmall.copy(fontSize = 11.5.sp),
+                        color = MistFaint,
+                        modifier = Modifier.padding(start = 6.dp),
+                    )
+                }
             }
         }
         if (backgroundCover.value > 0.001f) {
@@ -241,6 +250,31 @@ fun AppSettingsScreen(
     }
 }
 
+/** Section label above a settings card — larger than the item titles below it. */
+@Composable
+private fun SectionHeader(label: String) {
+    Text(
+        text = label,
+        style = MaterialTheme.typography.titleMedium,
+        color = Mist,
+        modifier = Modifier.padding(start = 4.dp, bottom = 8.dp),
+    )
+}
+
+/** Rounded panel, brighter than the page background, holding one or more rows. */
+@Composable
+private fun SettingsCard(
+    content: @Composable () -> Unit,
+) {
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .background(GraphiteRaised, RoundedCornerShape(16.dp)),
+    ) {
+        content()
+    }
+}
+
 @Composable
 private fun DirectSwitchRow(
     title: String,
@@ -252,11 +286,12 @@ private fun DirectSwitchRow(
     Row(
         modifier = Modifier
             .fillMaxWidth()
+            .heightIn(min = 68.dp)
             .clickable { onCheckedChange(!checked) }
             .padding(horizontal = 14.dp, vertical = 10.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {
-        Column(Modifier.weight(1f)) {
+        Column(Modifier.weight(1f).padding(end = 12.dp)) {
             Text(
                 text = title,
                 style = MaterialTheme.typography.bodyMedium,
