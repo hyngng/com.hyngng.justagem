@@ -64,20 +64,23 @@ fun GemConfirmDialog(
                         .padding(start = 24.dp, end = 24.dp, top = 16.dp)
                         .verticalScroll(rememberScrollState()),
                 )
-                Row(
-                    horizontalArrangement = Arrangement.spacedBy(4.dp),
+                GemDialogActionRow(
                     modifier = Modifier
                         .align(Alignment.End)
-                        .padding(end = 8.dp, bottom = 8.dp),
+                        .padding(top = 8.dp),
                 ) {
                     if (dismissLabel != null) {
-                        TextButton(onClick = onDismissRequest) {
-                            Text(dismissLabel, color = MistMuted)
-                        }
+                        GemDialogActionText(
+                            label = dismissLabel,
+                            color = MistMuted,
+                            onClick = onDismissRequest,
+                        )
                     }
-                    TextButton(onClick = onConfirm) {
-                        Text(confirmLabel, color = confirmColor)
-                    }
+                    GemDialogActionText(
+                        label = confirmLabel,
+                        color = confirmColor,
+                        onClick = onConfirm,
+                    )
                 }
             }
         }

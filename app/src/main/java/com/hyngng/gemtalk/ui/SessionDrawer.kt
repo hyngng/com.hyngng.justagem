@@ -182,7 +182,7 @@ fun SessionDrawer(
                             verticalAlignment = Alignment.CenterVertically,
                         ) {
                             Text(
-                                text = "GemTalk",
+                                text = "Justagem",
                                 style = MaterialTheme.typography.titleLarge.copy(fontSize = 20.sp),
                                 color = Mist,
                                 modifier = Modifier.weight(1f),

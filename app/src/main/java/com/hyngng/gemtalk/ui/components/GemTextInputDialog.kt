@@ -99,26 +99,28 @@ fun GemTextInputDialog(
                     keyboardOptions = KeyboardOptions(imeAction = ImeAction.Done),
                     keyboardActions = KeyboardActions(onDone = { if (value.text.isNotBlank()) onConfirm() }),
                 )
-                Row(
-                    horizontalArrangement = Arrangement.spacedBy(4.dp),
+                GemDialogActionRow(
                     modifier = Modifier
-                        .padding(top = 12.dp)
-                        .padding(end = 8.dp, bottom = 8.dp)
-                        .align(androidx.compose.ui.Alignment.End),
+                        .align(androidx.compose.ui.Alignment.End)
+                        .padding(top = 12.dp),
                 ) {
-                    TextButton(
+                    GemDialogActionText(
+                        label = dismissLabel,
+                        color = MistMuted,
                         onClick = {
                             keyboard?.hide()
                             onDismiss()
                         },
-                    ) { Text(dismissLabel, color = MistMuted) }
-                    TextButton(
+                    )
+                    GemDialogActionText(
+                        label = confirmLabel,
+                        color = Jade,
                         enabled = value.text.isNotBlank(),
                         onClick = {
                             keyboard?.hide()
                             onConfirm()
                         },
-                    ) { Text(confirmLabel, color = Jade) }
+                    )
                 }
             }
         }

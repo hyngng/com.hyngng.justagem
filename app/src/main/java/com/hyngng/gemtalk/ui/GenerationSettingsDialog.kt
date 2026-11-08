@@ -76,6 +76,7 @@ import androidx.core.content.ContextCompat
 import com.hyngng.gemtalk.media.PhotoSemanticIndexManager
 import com.hyngng.gemtalk.ui.components.LocalInteractionHaptics
 import com.hyngng.gemtalk.ui.components.GemConfirmDialog
+import com.hyngng.gemtalk.ui.components.GemDialogActionText
 import com.hyngng.gemtalk.ui.components.GemTalkDesign
 import com.hyngng.gemtalk.ui.components.GemTalkMotion
 import com.hyngng.gemtalk.ui.components.ThinkingDots
@@ -253,22 +254,22 @@ fun GenerationSettingsDialog(
                     Row(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(horizontal = 14.dp, vertical = 8.dp),
+                            // Footer keeps the equal bottom/right inset rule
+                            // shared with GemDialogActionRow (14dp here).
+                            .padding(start = 14.dp, top = 8.dp, end = 14.dp, bottom = 14.dp),
                         horizontalArrangement = Arrangement.End,
                         verticalAlignment = Alignment.CenterVertically,
                     ) {
-                        TextButton(onClick = {
-                            interactionHaptics?.perform(HapticFeedbackType.TextHandleMove)
-                            onReset()
-                        }) {
-                            Text(s.t("기본값", "Defaults"), color = MistMuted)
-                        }
-                        TextButton(onClick = {
-                            interactionHaptics?.perform(HapticFeedbackType.TextHandleMove)
-                            onDismiss()
-                        }) {
-                            Text(s.t("저장", "Save"), color = Jade)
-                        }
+                        GemDialogActionText(
+                            label = s.t("기본값", "Defaults"),
+                            color = MistMuted,
+                            onClick = onReset,
+                        )
+                        GemDialogActionText(
+                            label = s.t("저장", "Save"),
+                            color = Jade,
+                            onClick = onDismiss,
+                        )
                     }
                 }
             }
