@@ -2,23 +2,30 @@
 
 [English](README.md) | [한국어](README-ko.md)
 
-GemTalk is an Android chat app that runs a language model **entirely on-device**. It uses the ML Kit Prompt API backed by AICore (Gemini Nano / Gemma 4), so prompts, answers, and tool results never leave the device. There is no backend and no sign-in.
+GemTalk is an Android chat app that runs a language model **entirely on-device**. It uses the AICore-backed ML Kit Prompt API (Gemini Nano / Gemma 4), so prompts, answers, and tool results never leave the device. There is no backend and no sign-in.
 
-The UI follows the interaction patterns familiar from mainstream AI chat clients (ChatGPT, Claude, Gemini) — a message list with bubbles, a composer dock, a session drawer, and a settings page — re-implemented from scratch with Jetpack Compose.
+It follows the interaction experience of major AI chat apps — ChatGPT, Claude, Gemini, DeepSeek, Kimi, Meta AI and more — with a bubble message list, a composer dock, a session drawer, and a settings page, re-implemented from scratch with Jetpack Compose.
+
+Co-Engineered with:
+- Gemini 3.8 Flash
+- ChatGPT-6 Luna
 
 ## Features
 
-- Fully on-device inference (chat runs through AICore; the only optional network access is the explicitly triggered `web_fetch` tool)
-- Markdown rendering for answers, prompts, and thought transcripts (live during streaming)
-- LaTeX math (inline `$...$` and display `$$...$$`) rendered synchronously, including mid-stream
-- Thinking mode with a live thought preview and full-transcript reader
-- Two-way voice chat with a full-screen voice overlay
-- Semantic photo search over the device photo library
-- Function calling tools (`get_datetime`, `search_conversation_history`, `search_images`, `web_fetch`)
-- Multimodal input (camera and photo picker attachments)
-- Multiple sessions with rename/delete and full-text session search
-- Generation settings (temperature, Top-K, max output tokens, system instruction, model warm-up toggle)
-- Bilingual strings (Korean/English inline, following the system language)
+- Fully on-device inference
+- Markdown and LaTeX rendering
+- Thinking mode
+- Voice chat mode
+- Image semantic search
+- Image input
+- Tool calling
+    - `get_datetime`
+    - `web_fetch`
+    - `search_images`
+    - `search_conversations`
+- Session-based conversation management
+- Model settings
+- Multilingual support
 
 ## Requirements
 
@@ -40,8 +47,12 @@ The UI follows the interaction patterns familiar from mainstream AI chat clients
 ## Build
 
 ```bash
-./gradlew :app:assembleDebug   # debug APK at app/build/outputs/apk/debug/
+./gradlew :app:assembleDebug   # debug APK: app/build/outputs/apk/debug/
 ./gradlew :app:assembleRelease # release build is R8-optimized but unsigned
 ```
 
 Documentation on architecture and design decisions lives in `docs/README.md` (Korean).
+
+## Verified running environments
+
+- Snapdragon 8 Elite gen 5 (12GB RAM)
