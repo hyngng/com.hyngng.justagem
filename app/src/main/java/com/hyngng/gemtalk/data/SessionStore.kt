@@ -84,6 +84,7 @@ class SessionStore(context: Context) {
                 hapticsEnabled = root.optBoolean(KEY_HAPTICS, true),
                 soundsEnabled = root.optBoolean(KEY_SOUNDS, true),
                 warmupEnabled = root.optBoolean(KEY_WARMUP_ENABLED, true),
+                languageTag = root.optString(KEY_LANGUAGE, ""),
                 prePrompt = migratePrePrompt(root.optString(KEY_PRE_PROMPT, ""), savedVersion),
                 thinkingEnabled = root.optBoolean(KEY_THINKING, false),
                 temperature = root.optDouble(KEY_TEMPERATURE, 0.7).toFloat().coerceIn(0f, 1f),
@@ -105,6 +106,7 @@ class SessionStore(context: Context) {
                 put(KEY_HAPTICS, state.hapticsEnabled)
                 put(KEY_SOUNDS, state.soundsEnabled)
                 put(KEY_WARMUP_ENABLED, state.warmupEnabled)
+                put(KEY_LANGUAGE, state.languageTag)
                 put(KEY_PRE_PROMPT, state.prePrompt)
                 put(KEY_THINKING, state.thinkingEnabled)
                 put(KEY_TEMPERATURE, state.temperature.toDouble())
@@ -164,6 +166,8 @@ class SessionStore(context: Context) {
         val hapticsEnabled: Boolean = true,
         val soundsEnabled: Boolean = true,
         val warmupEnabled: Boolean = true,
+        // Empty tag = follow the system locale; otherwise an AppLanguage tag.
+        val languageTag: String = "",
         val prePrompt: String = DEFAULT_SYSTEM_INSTRUCTIONS,
         val thinkingEnabled: Boolean = false,
         val temperature: Float = 0.7f,
@@ -180,6 +184,7 @@ class SessionStore(context: Context) {
         const val KEY_HAPTICS = "hapticsEnabled"
         const val KEY_SOUNDS = "soundsEnabled"
         const val KEY_WARMUP_ENABLED = "warmupEnabled"
+        const val KEY_LANGUAGE = "language"
         const val KEY_PRE_PROMPT = "prePrompt"
         const val KEY_THINKING = "thinkingEnabled"
         const val KEY_TEMPERATURE = "temperature"

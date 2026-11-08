@@ -25,7 +25,9 @@ import com.hyngng.gemtalk.data.ChatSession
 import com.hyngng.gemtalk.data.SessionStore
 import com.hyngng.gemtalk.data.titleFrom
 import com.hyngng.gemtalk.media.PhotoSemanticIndexManager
+import com.hyngng.gemtalk.ui.i18n.AppLanguage
 import com.hyngng.gemtalk.ui.i18n.tr
+import com.hyngng.gemtalk.ui.i18n.updateProcessLanguage
 import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.channels.Channel
@@ -97,6 +99,8 @@ data class ChatUiState(
     val soundsEnabled: Boolean = true,
     // User-controlled warm up; off trades first-turn latency for battery.
     val warmupEnabled: Boolean = true,
+    // Blank tag follows the system locale; otherwise an AppLanguage tag.
+    val languageTag: String = AppLanguage.device().tag,
     val prePrompt: String = DEFAULT_SYSTEM_INSTRUCTIONS,
     val thinkingEnabled: Boolean = false,
     val temperature: Float = 0.7f,
@@ -175,6 +179,7 @@ class ChatViewModel(application: Application) : AndroidViewModel(application) {
                         hapticsEnabled = if (current.hapticsEnabled == defaults.hapticsEnabled) persisted.hapticsEnabled else current.hapticsEnabled,
                         soundsEnabled = if (current.soundsEnabled == defaults.soundsEnabled) persisted.soundsEnabled else current.soundsEnabled,
                         warmupEnabled = if (current.warmupEnabled == defaults.warmupEnabled) persisted.warmupEnabled else current.warmupEnabled,
+                        languageTag = if (current.languageTag == defaults.languageTag) persisted.languageTag else current.languageTag,
                         prePrompt = if (current.prePrompt == defaults.prePrompt) persisted.prePrompt else current.prePrompt,
                         thinkingEnabled = if (current.thinkingEnabled == defaults.thinkingEnabled) persisted.thinkingEnabled else current.thinkingEnabled,
                         temperature = if (current.temperature == defaults.temperature) persisted.temperature else current.temperature,
@@ -182,6 +187,8 @@ class ChatViewModel(application: Application) : AndroidViewModel(application) {
                         maxOutputTokens = if (current.maxOutputTokens == defaults.maxOutputTokens) persisted.maxOutputTokens else current.maxOutputTokens,
                     )
                     persistedStateLoaded = true
+                    // Mirror the restored language for non-composable notices.
+                    updateProcessLanguage(AppLanguage.resolve(uiState.languageTag))
                     // A persisted "off" wins over any warmup already kicked
                     // off before the stored state was readable.
                     if (!uiState.warmupEnabled) cancelModelWarmup()
@@ -386,6 +393,16 @@ class ChatViewModel(application: Application) : AndroidViewModel(application) {
         } else if (!enabled) {
             cancelModelWarmup()
         }
+        persist()
+    }
+
+    /**
+     * null rewinds to the system locale; otherwise pins the chosen language
+     * for both the Compose side and the tr() mirror used by viewmodels.
+     */
+    fun setLanguageTag(tag: String?) {
+        uiState = uiState.copy(languageTag = tag ?: "")
+        updateProcessLanguage(AppLanguage.resolve(uiState.languageTag))
         persist()
     }
 
@@ -1509,6 +1526,7 @@ class ChatViewModel(application: Application) : AndroidViewModel(application) {
             hapticsEnabled = uiState.hapticsEnabled,
             soundsEnabled = uiState.soundsEnabled,
             warmupEnabled = uiState.warmupEnabled,
+            languageTag = uiState.languageTag,
             prePrompt = uiState.prePrompt,
             thinkingEnabled = uiState.thinkingEnabled,
             temperature = uiState.temperature,
@@ -1557,6 +1575,8 @@ class ChatViewModel(application: Application) : AndroidViewModel(application) {
                 activeId = uiState.activeId,
                 hapticsEnabled = uiState.hapticsEnabled,
                 soundsEnabled = uiState.soundsEnabled,
+                warmupEnabled = uiState.warmupEnabled,
+                languageTag = uiState.languageTag,
                 prePrompt = uiState.prePrompt,
                 thinkingEnabled = uiState.thinkingEnabled,
                 temperature = uiState.temperature,

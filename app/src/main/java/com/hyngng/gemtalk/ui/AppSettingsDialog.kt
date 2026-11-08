@@ -43,6 +43,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.hyngng.gemtalk.ui.components.LocalInteractionHaptics
 import com.hyngng.gemtalk.ui.components.GemTalkDesign
+import com.hyngng.gemtalk.ui.components.LanguageDropdownRow
 import com.hyngng.gemtalk.ui.i18n.LocalStrings
 import com.hyngng.gemtalk.ui.theme.Hairline
 import com.hyngng.gemtalk.ui.theme.Ink
@@ -63,9 +64,11 @@ fun AppSettingsScreen(
     hapticsEnabled: Boolean,
     soundsEnabled: Boolean,
     warmupEnabled: Boolean,
+    languageTag: String,
     onHapticsChange: (Boolean) -> Unit,
     onSoundsChange: (Boolean) -> Unit,
     onWarmupChange: (Boolean) -> Unit,
+    onLanguageTagChange: (String?) -> Unit,
     onBack: () -> Unit,
     onEnterAnimationComplete: () -> Unit,
     onExitAnimationComplete: () -> Unit,
@@ -156,6 +159,14 @@ fun AppSettingsScreen(
                     ),
                 verticalArrangement = Arrangement.spacedBy(0.dp),
             ) {
+                // Language sits first — a device-wide preference, not a chat-detail toggle.
+                LanguageDropdownRow(
+                    languageTag = languageTag,
+                    onLanguageTagChange = onLanguageTagChange,
+                )
+
+                Spacer(Modifier.height(12.dp))
+
                 DirectSwitchRow(
                     title = s.t("모델 답변 시 햅틱", "Haptics during model responses"),
                     description = s.t(

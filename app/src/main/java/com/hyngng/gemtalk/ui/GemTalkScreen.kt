@@ -428,7 +428,7 @@ fun GemTalkApp(viewModel: ChatViewModel = viewModel()) {
 
     CompositionLocalProvider(
         LocalInteractionHaptics provides interactionHaptics,
-        LocalStrings provides Strings(AppLanguage.device()),
+        LocalStrings provides Strings(AppLanguage.resolve(state.languageTag)),
         // Cursor and drag handles share Jade: one accent family for input
         // caret and touch affordance, per the final tone decision.
         LocalTextSelectionColors provides TextSelectionColors(
@@ -651,9 +651,11 @@ fun GemTalkApp(viewModel: ChatViewModel = viewModel()) {
                 hapticsEnabled = state.hapticsEnabled,
                 soundsEnabled = state.soundsEnabled,
                 warmupEnabled = state.warmupEnabled,
+                languageTag = state.languageTag,
                 onHapticsChange = { viewModel.updateFeedbackSettings(it, state.soundsEnabled) },
                 onSoundsChange = { viewModel.updateFeedbackSettings(state.hapticsEnabled, it) },
                 onWarmupChange = { viewModel.setWarmupEnabled(it) },
+                onLanguageTagChange = { viewModel.setLanguageTag(it) },
                 onBack = closeAppSettings,
                 onEnterAnimationComplete = { settingsTransitioning = false },
                 onExitAnimationComplete = finishAppSettingsExit,

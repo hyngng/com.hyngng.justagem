@@ -15,7 +15,10 @@ enum class AppLanguage(val tag: String, val label: String) {
         fun fromTag(tag: String?): AppLanguage =
             entries.firstOrNull { it.tag == tag } ?: device()
 
-        /** The UI language follows the system locale; the app has no language setting. */
+        /** Blank/unknown tags (an unset setting) fall back to the system locale. */
+        fun resolve(tag: String?): AppLanguage = fromTag(tag?.takeIf { it.isNotBlank() })
+
+        /** Default when no explicit language choice is stored. */
         fun device(): AppLanguage =
             if (java.util.Locale.getDefault().language.equals("ko", ignoreCase = true)) KOREAN else ENGLISH
     }
