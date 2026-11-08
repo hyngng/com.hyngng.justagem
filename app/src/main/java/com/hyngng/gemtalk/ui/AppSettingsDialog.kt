@@ -164,10 +164,10 @@ fun AppSettingsScreen(
                         horizontal = GemTalkDesign.dialogHorizontalPadding,
                         vertical = GemTalkDesign.sectionSpacing,
                     ),
-                verticalArrangement = Arrangement.spacedBy(20.dp),
+                verticalArrangement = Arrangement.spacedBy(0.dp),
             ) {
                 // Language sits first — a device-wide preference, not a chat-detail toggle.
-                SectionHeader(s.t("언어", "Language"))
+                SectionHeader(s.t("일반", "General"))
                 SettingsCard {
                     LanguageDropdownRow(
                         languageTag = languageTag,
@@ -214,15 +214,23 @@ fun AppSettingsScreen(
                 }
 
                 // Discreet on-device privacy statement
-                Row {
-                    Icon(
-                        Icons.Rounded.Info,
-                        contentDescription = null,
-                        tint = MistFaint,
-                        modifier = Modifier
-                            .size(13.dp)
-                            .padding(top = 1.dp),
-                    )
+                Row(
+                    modifier = Modifier.padding(top = 40.dp),
+                    verticalAlignment = Alignment.Top,
+                ) {
+                    // Sized to the note's text glyph, centered inside one text
+                    // line box so the (i) does not tower over the font.
+                    Box(
+                        modifier = Modifier.height(16.dp),
+                        contentAlignment = Alignment.Center,
+                    ) {
+                        Icon(
+                            Icons.Rounded.Info,
+                            contentDescription = null,
+                            tint = MistFaint,
+                            modifier = Modifier.size(11.dp),
+                        )
+                    }
                     Text(
                         text = s.t(
                             "모든 벡터 추출 및 사진 분석은 기기 내부에서만 안전하게 실행되며, 외부 서버로 전송되지 않습니다. 온디바이스 모델에서 가장 매력적인 점이죠.",
@@ -250,14 +258,16 @@ fun AppSettingsScreen(
     }
 }
 
-/** Section label above a settings card — larger than the item titles below it. */
+/** Section label above a settings card — larger than the item titles below it.
+ *  The gap below the label (8dp) is kept much tighter than the gap above it
+ *  (20dp, see content column) so the label hugs its card. */
 @Composable
 private fun SectionHeader(label: String) {
     Text(
         text = label,
         style = MaterialTheme.typography.titleMedium,
         color = Mist,
-        modifier = Modifier.padding(start = 4.dp, bottom = 8.dp),
+        modifier = Modifier.padding(start = 4.dp, top = 20.dp, bottom = 8.dp),
     )
 }
 
