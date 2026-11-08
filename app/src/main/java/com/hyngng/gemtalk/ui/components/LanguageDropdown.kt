@@ -44,10 +44,12 @@ import androidx.compose.ui.draw.rotate
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.TransformOrigin
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
-import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.layout.onGloballyPositioned
+import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import com.hyngng.gemtalk.ui.i18n.AppLanguage
 import com.hyngng.gemtalk.ui.i18n.LocalStrings
 import com.hyngng.gemtalk.ui.theme.GraphiteRaised
@@ -59,10 +61,10 @@ import com.hyngng.gemtalk.ui.theme.MistFaint
 import kotlinx.coroutines.delay
 
 /**
- * Settings-page dropdown row following the ModelSelector popup grammar:
- * measured anchor width, MutableTransitionState fade+scale popup over a
- * GraphiteRaised surface, and single-line rows with a Jade check for the
- * active choice. A blank tag means "follow the system language".
+ * Settings-card dropdown row. The anchor shows only the title/description and
+ * a rotating chevron; the popup itself (fixed 280dp, the common menu width)
+ * carries a header with the current value, then one row per choice with a
+ * Jade check on the active one. A blank tag means "follow the system language".
  */
 @Composable
 internal fun LanguageDropdownRow(
@@ -73,7 +75,6 @@ internal fun LanguageDropdownRow(
     val s = LocalStrings.current
     val density = LocalDensity.current
     var expanded by remember { mutableStateOf(false) }
-    var anchorWidth by remember { mutableStateOf(0.dp) }
     var anchorHeight by remember { mutableStateOf(0.dp) }
     val menuTransition = remember { MutableTransitionState(false) }
     var menuPresent by remember { mutableStateOf(false) }
@@ -111,15 +112,13 @@ internal fun LanguageDropdownRow(
         modifier = Modifier
             .fillMaxWidth()
             .onGloballyPositioned { coordinates ->
-                anchorWidth = with(density) { coordinates.size.width.toDp() }
                 anchorHeight = with(density) { coordinates.size.height.toDp() }
             },
     ) {
         Row(
             modifier = Modifier
                 .fillMaxWidth()
-                .heightIn(min = 48.dp)
-                .clip(RoundedCornerShape(12.dp))
+                .clip(RoundedCornerShape(16.dp))
                 .clickable(
                     interactionSource = interactionSource,
                     indication = null,
@@ -128,7 +127,7 @@ internal fun LanguageDropdownRow(
                     expanded = !expanded
                 }
                 .background(background)
-                .padding(horizontal = 10.dp, vertical = 6.dp),
+                .padding(horizontal = 14.dp, vertical = 10.dp),
             verticalAlignment = Alignment.CenterVertically,
         ) {
             Column(Modifier.weight(1f)) {
@@ -138,9 +137,13 @@ internal fun LanguageDropdownRow(
                     color = Mist,
                 )
                 Text(
-                    text = currentValue,
-                    style = MaterialTheme.typography.labelSmall,
+                    text = s.t(
+                        "앱 표시 언어를 고정할 수 있습니다. 기본값은 시스템 언어를 따릅니다.",
+                        "Pins the app display language. By default it follows the system language.",
+                    ),
+                    style = MaterialTheme.typography.labelSmall.copy(fontSize = 11.5.sp),
                     color = MistFaint,
+                    modifier = Modifier.padding(top = 2.dp),
                 )
             }
             Icon(
@@ -179,7 +182,7 @@ internal fun LanguageDropdownRow(
                         ),
                 ) {
                     Surface(
-                        modifier = Modifier.width(anchorWidth),
+                        modifier = Modifier.width(280.dp),
                         shape = RoundedCornerShape(18.dp),
                         color = GraphiteRaised,
                         tonalElevation = 10.dp,
@@ -190,6 +193,31 @@ internal fun LanguageDropdownRow(
                                 .fillMaxWidth()
                                 .padding(6.dp),
                         ) {
+                            // The menu itself restates the active choice, so
+                            // the row can stay pure title + description.
+                            Column(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(horizontal = 14.dp, vertical = 8.dp),
+                            ) {
+                                Text(
+                                    text = s.t("언어", "Language"),
+                                    style = MaterialTheme.typography.labelSmall,
+                                    color = MistFaint,
+                                )
+                                Text(
+                                    text = currentValue,
+                                    style = MaterialTheme.typography.bodyMedium.copy(
+                                        fontWeight = FontWeight.SemiBold,
+                                    ),
+                                    color = Mist,
+                                    modifier = Modifier.padding(top = 1.dp),
+                                )
+                            }
+                            HorizontalDivider(
+                                modifier = Modifier.padding(horizontal = 8.dp, vertical = 3.dp),
+                                color = Hairline.copy(alpha = 0.42f),
+                            )
                             LanguageMenuRow(
                                 label = s.t("시스템 언어 따름", "Follow system language"),
                                 selected = languageTag.isBlank(),
@@ -198,10 +226,6 @@ internal fun LanguageDropdownRow(
                                     onLanguageTagChange(null)
                                     expanded = false
                                 },
-                            )
-                            HorizontalDivider(
-                                modifier = Modifier.padding(horizontal = 8.dp, vertical = 3.dp),
-                                color = Hairline.copy(alpha = 0.42f),
                             )
                             AppLanguage.entries.forEach { language ->
                                 LanguageMenuRow(
@@ -252,7 +276,7 @@ private fun LanguageMenuRow(
         Text(
             label,
             style = MaterialTheme.typography.bodySmall.copy(
-                fontWeight = if (selected) androidx.compose.ui.text.font.FontWeight.SemiBold else androidx.compose.ui.text.font.FontWeight.Normal,
+                fontWeight = if (selected) FontWeight.SemiBold else FontWeight.Normal,
             ),
             color = if (selected) Jade else Mist,
             modifier = Modifier.weight(1f),

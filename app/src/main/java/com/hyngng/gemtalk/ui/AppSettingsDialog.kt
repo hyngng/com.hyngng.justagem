@@ -35,7 +35,11 @@ import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.ui.hapticfeedback.HapticFeedbackType
@@ -46,6 +50,7 @@ import com.hyngng.gemtalk.ui.components.GemTalkDesign
 import com.hyngng.gemtalk.ui.components.LanguageDropdownRow
 import com.hyngng.gemtalk.ui.i18n.LocalStrings
 import com.hyngng.gemtalk.ui.theme.Hairline
+import com.hyngng.gemtalk.ui.theme.GraphiteRaised
 import com.hyngng.gemtalk.ui.theme.Ink
 import com.hyngng.gemtalk.ui.theme.Jade
 import com.hyngng.gemtalk.ui.theme.Mist
@@ -159,43 +164,55 @@ fun AppSettingsScreen(
                     ),
                 verticalArrangement = Arrangement.spacedBy(0.dp),
             ) {
-                // Language sits first — a device-wide preference, not a chat-detail toggle.
-                LanguageDropdownRow(
-                    languageTag = languageTag,
-                    onLanguageTagChange = onLanguageTagChange,
-                )
+                // Grouped card: each item sits in one rounded panel slightly
+                // brighter than the page background, separated by hairlines.
+                Column(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .background(GraphiteRaised, RoundedCornerShape(16.dp)),
+                ) {
+                    // Language sits first — a device-wide preference, not a chat-detail toggle.
+                    LanguageDropdownRow(
+                        languageTag = languageTag,
+                        onLanguageTagChange = onLanguageTagChange,
+                    )
 
-                Spacer(Modifier.height(12.dp))
+                    HorizontalDivider(color = Hairline.copy(alpha = 0.5f))
 
-                DirectSwitchRow(
-                    title = s.t("모델 답변 시 햅틱", "Haptics during model responses"),
-                    description = s.t(
-                        "답변 텍스트가 새로 도착할 때마다 짧은 진동이 울립니다.",
-                        "A short vibration marks each new response text chunk.",
-                    ),
-                    checked = hapticsEnabled,
-                    onCheckedChange = onHapticsChange,
-                )
+                    DirectSwitchRow(
+                        title = s.t("모델 답변 시 햅틱", "Haptics during model responses"),
+                        description = s.t(
+                            "답변 텍스트가 새로 도착할 때마다 짧은 진동이 울립니다.",
+                            "A short vibration marks each new response text chunk.",
+                        ),
+                        checked = hapticsEnabled,
+                        onCheckedChange = onHapticsChange,
+                    )
 
-                DirectSwitchRow(
-                    title = s.t("모델 답변 시 효과음 재생", "Play sound effects during model responses"),
-                    description = s.t(
-                        "답변 텍스트가 새로 도착할 때마다 효과음을 재생합니다.",
-                        "Plays a sound as each new response text chunk arrives.",
-                    ),
-                    checked = soundsEnabled,
-                    onCheckedChange = onSoundsChange,
-                )
+                    HorizontalDivider(color = Hairline.copy(alpha = 0.5f))
 
-                DirectSwitchRow(
-                    title = s.t("모델 미리 예열 (빠른 첫 응답)", "Pre-warm model (faster first reply)"),
-                    description = s.t(
-                        "앱 실행 시 모델을 가속기에 미리 적재하여 첫 질문의 답변 시작을 빠르게 합니다. 배터리를 소량 더 소모할 수 있습니다.",
-                        "Loads the model onto the accelerator in advance so the first reply starts sooner. May use slightly more battery.",
-                    ),
-                    checked = warmupEnabled,
-                    onCheckedChange = onWarmupChange,
-                )
+                    DirectSwitchRow(
+                        title = s.t("모델 답변 시 효과음 재생", "Play sound effects during model responses"),
+                        description = s.t(
+                            "답변 텍스트가 새로 도착할 때마다 효과음을 재생합니다.",
+                            "Plays a sound as each new response text chunk arrives.",
+                        ),
+                        checked = soundsEnabled,
+                        onCheckedChange = onSoundsChange,
+                    )
+
+                    HorizontalDivider(color = Hairline.copy(alpha = 0.5f))
+
+                    DirectSwitchRow(
+                        title = s.t("모델 미리 예열 (빠른 첫 응답)", "Pre-warm model (faster first reply)"),
+                        description = s.t(
+                            "앱 실행 시 모델을 가속기에 미리 적재하여 첫 질문의 답변 시작을 빠르게 합니다. 배터리를 소량 더 소모할 수 있습니다.",
+                            "Loads the model onto the accelerator in advance so the first reply starts sooner. May use slightly more battery.",
+                        ),
+                        checked = warmupEnabled,
+                        onCheckedChange = onWarmupChange,
+                    )
+                }
 
                 // Discreet on-device privacy statement
                 Spacer(Modifier.height(24.dp))
@@ -236,7 +253,7 @@ private fun DirectSwitchRow(
         modifier = Modifier
             .fillMaxWidth()
             .clickable { onCheckedChange(!checked) }
-            .padding(vertical = 10.dp),
+            .padding(horizontal = 14.dp, vertical = 10.dp),
         verticalAlignment = Alignment.CenterVertically,
     ) {
         Column(Modifier.weight(1f)) {
