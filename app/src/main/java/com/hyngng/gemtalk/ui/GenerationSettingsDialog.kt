@@ -17,9 +17,11 @@ import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.heightIn
+import androidx.compose.foundation.layout.IntrinsicSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
@@ -407,8 +409,13 @@ private fun EmbeddingGemmaSection(
 
         // Gemma 섹션 헤더와 하위 컨트롤 간의 상단 기준 정렬 및 간격(sectionSpacing, 16dp)과 일치시키기 위해,
         // 버튼 높이로 인해 좌측 타이틀 텍스트가 아래로 처지지 않도록 verticalAlignment를 Alignment.Top으로 둔다.
+        // IntrinsicSize.Min makes the button stretch to exactly the height of the
+        // label+progress bundle on the left; its 96dp width mirrors the numeric
+        // field slot of the sliders above, so the bar tracks align.
         Row(
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(IntrinsicSize.Min),
             verticalAlignment = Alignment.Top,
         ) {
             Column(
@@ -476,8 +483,15 @@ private fun EmbeddingGemmaSection(
                 ),
                 shape = RoundedCornerShape(8.dp),
                 contentPadding = androidx.compose.foundation.layout.PaddingValues(horizontal = 4.dp, vertical = 8.dp),
-                modifier = Modifier.width(96.dp),
+                // Icon+text act as one logical unit, centered in the fixed slot.
+                modifier = Modifier
+                    .width(96.dp)
+                    .fillMaxHeight(),
             ) {
+                Row(
+                    verticalAlignment = Alignment.CenterVertically,
+                    horizontalArrangement = Arrangement.Center,
+                ) {
                 Icon(
                     when {
                         indexState.isIndexing -> Icons.Rounded.Stop
@@ -501,20 +515,13 @@ private fun EmbeddingGemmaSection(
                     style = MaterialTheme.typography.labelMedium,
                     maxLines = 1,
                 )
+                }
             }
         }
     }
 
     if (confirmStart) {
         val analysisText = buildString {
-            if (totalCount > 0) {
-                append(
-                    s.t(
-                        "기기 사진 ${"%,d".format(totalCount)}장을 분석합니다. ",
-                        "This analyzes ${"%,d".format(totalCount)} photos on this device. ",
-                    ),
-                )
-            }
             append(
                 s.t(
                     "사진 한 장마다 온디바이스 모델이 벡터를 계산하므로 수 분 이상 걸릴 수 있고 배터리를 사용합니다. ",
