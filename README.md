@@ -2,6 +2,8 @@
 
 [English](README.md) | [한국어](README-ko.md)
 
+![screenshot](docs/assets/screenshot-1.jpg)
+
 Justagem is an Android chat app that runs a language model **entirely on-device**. It uses the AICore-backed ML Kit Prompt API (Gemini Nano / Gemma 4), so prompts, answers, and tool results never leave the device. There is no backend and no sign-in.
 
 It follows the interaction experience of major AI chat apps — ChatGPT, Claude, Gemini, DeepSeek, Kimi, Meta AI and more — with a bubble message list, a composer dock, a session drawer, and a settings page, re-implemented from scratch with Jetpack Compose.
