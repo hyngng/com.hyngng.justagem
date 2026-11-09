@@ -22,6 +22,6 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "gemtalk"
+rootProject.name = "Justagem"
 include(":app")
  

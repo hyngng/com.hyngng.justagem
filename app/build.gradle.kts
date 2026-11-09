@@ -4,13 +4,13 @@ plugins {
 }
 
 android {
-    namespace = "com.hyngng.gemtalk"
+    namespace = "com.hyngng.justagem"
     compileSdk {
         version = release(37)
     }
 
     defaultConfig {
-        applicationId = "com.hyngng.gemtalk"
+        applicationId = "com.hyngng.justagem"
         minSdk = 26
         targetSdk = 37
         versionCode = 11

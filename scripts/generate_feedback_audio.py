@@ -1,4 +1,4 @@
-"""Generate the tiny, soft notification chimes bundled by GemTalk."""
+"""Generate the tiny, soft notification chimes bundled by Justagem."""
 
 import math
 import os

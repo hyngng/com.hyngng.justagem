@@ -1,8 +1,8 @@
-# GemTalk
+# Justagem
 
 [English](README.md) | [한국어](README-ko.md)
 
-GemTalk is an Android chat app that runs a language model **entirely on-device**. It uses the AICore-backed ML Kit Prompt API (Gemini Nano / Gemma 4), so prompts, answers, and tool results never leave the device. There is no backend and no sign-in.
+Justagem is an Android chat app that runs a language model **entirely on-device**. It uses the AICore-backed ML Kit Prompt API (Gemini Nano / Gemma 4), so prompts, answers, and tool results never leave the device. There is no backend and no sign-in.
 
 It follows the interaction experience of major AI chat apps — ChatGPT, Claude, Gemini, DeepSeek, Kimi, Meta AI and more — with a bubble message list, a composer dock, a session drawer, and a settings page, re-implemented from scratch with Jetpack Compose.
 
@@ -51,8 +51,7 @@ Co-Engineered with:
 ./gradlew :app:assembleRelease # release build is R8-optimized but unsigned
 ```
 
-Documentation on architecture and design decisions lives in `docs/README.md` (Korean).
-
 ## Verified running environments
 
 - Snapdragon 8 Elite gen 5 (12GB RAM)
+- Snapdragon 8 Elite (12GB RAM)
