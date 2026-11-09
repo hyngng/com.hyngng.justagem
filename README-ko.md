@@ -2,7 +2,7 @@
 
 [English](README.md) | [한국어](README-ko.md)
 
-![screenshot](docs/assets/screenshot-1.jpg)
+![screenshot](docs/assets/screenshots.webp)
 
 Justagem은 언어 모델을 **완전히 온디바이스에서** 실행하는 안드로이드 채팅 앱입니다. AICore 기반의 ML Kit Prompt API(Gemini Nano / Gemma 4)를 사용해 프롬프트, 답변, 도구 결과가 기기 밖으로 나가지 않으며, 백엔드나 로그인이 없습니다.
 
